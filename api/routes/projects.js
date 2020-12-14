@@ -9,8 +9,14 @@ router.use((req, res, next) => {
 });
 
 
-router.get('/', function(req, res, next) {
-  res.status(200).send('Main Projects Route');
+router.get('/', async (req, res) => {
+  try {
+    let projectIndex = await db.promise().query(`SELECT * FROM project`);
+    res.status(200).send(projectIndex[0]);
+  } 
+  catch (error) {
+    res.status(403).send(error);
+  }
 });
 
 module.exports = router;
