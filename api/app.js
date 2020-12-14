@@ -4,23 +4,26 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// REGISTER ROUTERS
+const projectsRouter  = require('./routes/projects');
+const tasksRouter     = require('./routes/tasks');
+const usersRouter     = require('./routes/users');
+const utilitiesRouter = require('./routes/utilities');
 
 var app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
+// APP CONFIG
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// ROUTING
+app.use('/api/users', usersRouter);
+app.use('/api/tasks', tasksRouter);
+app.use('/api/projects', projectsRouter);
+app.use('/api/utilities', utilitiesRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -35,7 +38,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json({ error: err});
 });
 
 module.exports = app;
