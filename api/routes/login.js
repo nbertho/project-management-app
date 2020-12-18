@@ -12,9 +12,44 @@ router.use((req, res, next) => {
 
 // LOGIN
 router.post('/login', async (req, res, next) => {
+  const schema = Joi.object({
+    mail: Joi.string().email({ tlds: { allow: false }}).required(),
+    pwd: Joi.string().min(6).required()
+  });
 
+  // Validate request body information
+  let result = schema.validate(req.body);
   
+  if (result.error) {
+    // Send 400 Status (Bad Request) + Error Details
+    res.status(400).send(result.error.details[0].message);
+    return;
+  }
+  else {
+    try {
+      db.query('SELECT * from USERS WHERE email LIKE ?;', req.body.mail, function(err, result, field) {
+        if(result.length ==1) {
+          dbMail = result[0].email;
+          dbPwd = result[0].password;
+          bcrypt.compare(req.body.pwd, dbPwd).then(function(result) {
+            if (result == true) {
+              res.send(200).send('PASSWORD MATCH');
+            }
+            else {
+              res.status(403).json({error: 'Wrong credentials'});
+            }
+          });
+        }
+        else {
+          throw 'Too many row with email value'; // SHOULD NEVER HAPPEND
+        }
+      });
+    }
+    catch (error) {
+      res.status(400).json({error: error});
+    }
 
+  }
 });
 
 // REGISTER
@@ -72,8 +107,6 @@ router.post('/register', async (req, res, next) => {
     });
   }
 });
-
-// LOGIN
 
 // UPDATE USER
 
