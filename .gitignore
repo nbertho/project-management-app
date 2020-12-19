@@ -105,3 +105,6 @@ dist
 
 # API Config files
 api/config/*
+
+# Notes
+notes.txt
