@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
 // GET ALL USER'S PROJECT
 
 // CREATE PROJECT
-router.post('/create', async (req, res) => {
+router.put('/create', async (req, res) => {
   const schema = Joi.object({
     name: Joi.string().min(3).max(255).required(),
     description: Joi.string(),

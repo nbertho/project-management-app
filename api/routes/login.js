@@ -53,7 +53,7 @@ router.post('/login', async (req, res, next) => {
 });
 
 // REGISTER
-router.post('/register', async (req, res, next) => {
+router.put('/register', async (req, res, next) => {
   
   // Create Joi obj for request body information
   const schema = Joi.object({
