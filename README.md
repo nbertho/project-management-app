@@ -23,7 +23,10 @@ This app is done for my graduation work
 
 * [ ] Improve code and projects overall
 
-## Improvements
+## Version 1.0
+- In **projects.js** creating a project give him status_id of 1 and makes it active
+
+## Futur improvements
 
 ## Features to add
 
