@@ -32,3 +32,5 @@ This app is done for my graduation work
 
 ## TODO
 - Change <em>secret</em> from **index.js** when launching the app
+- Check code sent to make sure they are relevant
+- Check Json response to make sure the key are the same around the app
