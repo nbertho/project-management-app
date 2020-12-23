@@ -83,5 +83,78 @@ router.put('/create/:project_id', async (req, res) => {
 });
 
 
+// UPDATE TASK STATUS
+router.post('/task/status/update/:id', async (req, res) => {
+
+  const schema = Joi.object({
+    status_id: Joi.number().integer().required(),
+  });
+  
+  // Validate request body information
+  let result = schema.validate(req.body);
+    
+  if (result.error) {
+    // Send 400 Status (Bad Request) + Error Details
+    res.status(400).send(result.error.details[0].message);
+    return;
+  }
+  else {
+    db.query(`UPDATE tasks SET status_id = ? WHERE (id = ?);`, [ req.body.status_id, req.params.id], function (err, result, field) {
+      if (err) {
+        throw err;
+      }
+      else {
+        res.status(200).json({success: `Task ${req.params.id} updated successfully`});
+      }
+    });
+  }
+});
+
+
+// UPDATE TASK 
+router.post('/task/update/:id', async (req, res) => {
+
+  const schema = Joi.object({
+    name: Joi.string().min(3).required(),
+    description: Joi.string(),
+    estimated_time: Joi.number().integer(),
+    status_id: Joi.number().integer().required(),
+    parent_tasks_id: Joi.number().integer().required(),
+  });
+  
+  // Validate request body information
+  let result = schema.validate(req.body);
+    
+  if (result.error) {
+    // Send 400 Status (Bad Request) + Error Details
+    res.status(400).send(result.error.details[0].message);
+    return;
+  }
+  else {
+    db.query(`UPDATE tasks 
+            SET name = ?, 
+            description = ?, 
+            estimated_time = ?, 
+            status_id = ?, 
+            parent_tasks_id = ? 
+            WHERE (id = ?);`, 
+            [ 
+              req.body.name, 
+              req.body.description, 
+              req.body.estimated_time, 
+              req.body.status_id, 
+              req.body.parent_tasks_id, 
+              req.params.id 
+            ] , 
+            function (err, result, field) {
+              if (err) {
+                throw err;
+              }
+              else {
+                res.status(200).json({success: `Task ${req.params.id} updated successfully`});
+              }
+    });
+  }
+});
 
 module.exports = router;
