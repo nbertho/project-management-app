@@ -48,7 +48,7 @@ router.put('/create', async (req, res) => {
 })
 
 
-// Get Project details
+// GET PROJECTS DETAILS
 router.get('/show/:id', async (req, res) => {
   try {
     db.query('SELECT * FROM project WHERE id = ?', req.params.id, function(err, result, field) {
