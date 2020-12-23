@@ -60,7 +60,47 @@ router.put('/create', async (req, res) => {
 })
 
 // UPDATE PROJECT
+router.post('/update/:id', async (req, res) => {
 
-// DELETE PROJECT
+  const schema = Joi.object({
+    name: Joi.string().min(3).required(),
+    description: Joi.string(),
+    active: Joi.number().integer(),
+    status_id: Joi.number().integer(),
+  });
+  
+  // Validate request body information
+  let result = schema.validate(req.body);
+    
+  if (result.error) {
+    // Send 400 Status (Bad Request) + Error Details
+    res.status(400).send(result.error.details[0].message);
+    return;
+  }
+  else {
+    db.query(`UPDATE project 
+            SET name = ?, 
+            description = ?, 
+            active = ? ,
+            status_id = ?
+            WHERE (id = ?);`, 
+            [ 
+              req.body.name, 
+              req.body.description, 
+              req.body.active, 
+              req.body.status_id,
+              req.params.id 
+            ] , 
+            function (err, result, field) {
+              if (err) {
+                throw err;
+              }
+              else {
+                res.status(200).json({success: `Project ${req.params.id} updated successfully`});
+              }
+    });
+  }
+});
+
 
 module.exports = router;
