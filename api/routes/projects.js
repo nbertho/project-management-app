@@ -20,7 +20,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET ALL USER'S PROJECT
 
 // CREATE PROJECT
 router.put('/create', async (req, res) => {
@@ -58,6 +57,24 @@ router.put('/create', async (req, res) => {
   }
 
 })
+
+
+// Get Project details
+router.get('/show/:id', async (req, res) => {
+  try {
+    db.query('SELECT * FROM project WHERE id = ?', req.params.id, function(err, result, field) {
+      if (err) {
+        throw err;
+      }
+      else {
+        res.send(result);
+      }
+    });
+  } catch (error) {
+    res.status(404).send(error);
+  }
+});
+
 
 // UPDATE PROJECT
 router.post('/update/:id', async (req, res) => {
