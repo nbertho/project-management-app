@@ -45,7 +45,7 @@ router.put('/create', async (req, res) => {
     });
   }
 
-})
+});
 
 
 // GET PROJECTS DETAILS

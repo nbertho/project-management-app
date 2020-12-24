@@ -157,4 +157,31 @@ router.post('/task/update/:id', async (req, res) => {
   }
 });
 
+
+// DELETE TASK
+router.delete('/task/delete/:id', async (req, res) => {
+  const schema = Joi.object({
+    id: Joi.number().integer().required(),
+  });
+  
+  // Validate request body information
+  let result = schema.validate(req.params);
+    
+  if (result.error) {
+    // Send 400 Status (Bad Request) + Error Details
+    res.status(400).send(result.error.details[0].message);
+    return;
+  }
+  else {
+    db.query('DELETE FROM tasks WHERE (id = ?);', req.params.id, function (err, result, field) {
+      if (err) {
+        throw err;
+      }
+      else {
+        res.status(200).json({success: `Task ${req.params.id} deleted successfully`});
+      }
+    });
+  }
+});
+
 module.exports = router;
