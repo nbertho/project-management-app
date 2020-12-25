@@ -41,7 +41,7 @@ router.post('/login', async (req, res, next) => {
                 });
                 idArray = idArray.substring(0, idArray.length - 1);
                 req.session.project_list_id = idArray;
-                res.status(400).json({success: 'Logged in'});
+                res.status(200).json({success: 'Logged in'});
               });
             }
             else {
