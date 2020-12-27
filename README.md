@@ -10,11 +10,11 @@ This app is done for my graduation work
 
 * [ ] Build backend ( **Express JS** )
     * [x] Connect to DB
-    * [ ] Handle login connexion
+    * [x] Handle login connexion
     * [ ] Create roles route
     * [ ] Create users route
-    * [ ] Create projects route
-    * [ ] Create tasks route
+    * [x] Create projects route
+    * [x] Create tasks route
 
 * [ ] Build frontend ( **React** )
     * [ ] Create login page

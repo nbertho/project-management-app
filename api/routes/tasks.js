@@ -9,6 +9,51 @@ router.use((req, res, next) => {
   next();
 });
 
+// Verify user rights
+router.use( async (req, res, next) => {
+  const schema = Joi.object({
+    users_id: Joi.number().integer(),
+    token: Joi.string().min(20)
+  });
+  
+  // Validate request body information
+  let result = schema.validate(req.body);
+    
+  if (result.error) {
+    // Send 400 Status (Bad Request) + Error Details
+    res.status(400).send(result.error.details[0].message);
+    return;
+  }
+  else {
+    try {
+      db.query('SELECT * FROM project JOIN users_has_project on project.id = users_has_project.project_id WHERE (users_id = ? && token = ? && id == ?);', [req.body.users_id, req.body.token], function (err, result, field) {
+        if (err) {
+          console.log(err);
+          throw err;
+        }
+        else {
+          let data = result[0];
+          if (data) {
+            if (data.users_id == req.body.users_id && data.token == req.body.token) {
+              next();
+            }
+            else {
+              res.status(401).json({error: 'Unauthorised'});
+            }
+          }
+          else {
+            res.status(401).json({error: 'Unauthorised'});
+          }
+        }
+      });   
+    }
+    catch(e) {
+      console.log(e);
+      res.status(401).json({error: 'Unauthorised'})
+    } 
+  }
+});
+
 
 // INDEX PROJECT TASK
 router.get('/project/:project_id', (req, res) => {

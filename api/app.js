@@ -19,7 +19,13 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(session({secret: "production-token"}));
+app.use(session({
+  key: 'users_id',
+  secret: "production-token",
+  resave: false,
+  saveUninitialized: false
+}));
+
 
 // ROUTING
 app.use('/login', loginRouter);

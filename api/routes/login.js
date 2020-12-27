@@ -27,20 +27,22 @@ router.post('/login', async (req, res, next) => {
   }
   else {
     try {
-      db.query('SELECT * from USERS WHERE email LIKE ?;', req.body.mail, function(err, result, field) {
+      db.query('SELECT * from users WHERE email LIKE ?;', req.body.mail, function(err, result, field) {
         if(result.length == 1) {
           const dbMail = result[0].email;
           const dbPwd = result[0].password;
           const dbId = result[0].id;
           bcrypt.compare(req.body.pwd, dbPwd).then(function(result) {
             if (result == true) {
-              db.query('SELECT project_id from users_has_project WHERE users_id =  ?;', dbId, function(err, projectResult, field) {
-                let idArray = "";
-                projectResult.forEach(id => {
-                  idArray = idArray + id.project_id + ','
+              db.query('SELECT project_id, token FROM users_has_project JOIN project on users_has_project.project_id = project.id WHERE users_id = ?;', dbId, function(err, projectResult, field) {
+                let projectArray = "[";
+                projectResult.forEach(project => {
+                  projectArray = projectArray + '[' + project.project_id + ',' + project.token + '],'
                 });
-                idArray = idArray.substring(0, idArray.length - 1);
-                req.session.project_list_id = idArray;
+                projectArray = projectArray.substring(0, projectArray.length - 1);
+                projectArray = projectArray + ']'
+                req.session.users_project_list = projectArray;
+                req.session.user_id = dbId;
                 res.status(200).json({success: 'Logged in'});
               });
             }
