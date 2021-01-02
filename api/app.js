@@ -20,10 +20,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
-  key: 'users_id',
   secret: "production-token",
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: true
 }));
 
 

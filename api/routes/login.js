@@ -12,54 +12,56 @@ router.use((req, res, next) => {
 
 // LOGIN
 router.post('/login', async (req, res, next) => {
-  const schema = Joi.object({
-    mail: Joi.string().email({ tlds: { allow: false }}).required(),
-    pwd: Joi.string().min(6).required()
-  });
 
-  // Validate request body information
-  let result = schema.validate(req.body);
-  
-  if (result.error) {
-    // Send 400 Status (Bad Request) + Error Details
-    res.status(400).send(result.error.details[0].message);
-    return;
+  // If user is already logged in
+  if (req.session.loggedin == true) {
+    res.status(409).json({error: 'You are already logged-in'});
   }
+  // If user is not logged in yet
   else {
-    try {
+    // Verify that the request's body contains everything
+    const schema = Joi.object({
+      mail: Joi.string().email({ tlds: { allo: false }}).required(),
+      pwd: Joi.string().min(6).required()
+    })
+    let result = schema.validate(req.body);
+  
+    // If the request's body is not correct
+    if (result.error) {
+      // Send 400 Status (Bad Request) + Error Details
+      res.status(400).json({error: result.error.details[0].message});
+      return;
+    } 
+    else {
+      let username = req.body.mail;
+      let password = req.body.pwd;
       db.query('SELECT * from users WHERE email LIKE ?;', req.body.mail, function(err, result, field) {
         if(result.length == 1) {
-          const dbMail = result[0].email;
-          const dbPwd = result[0].password;
-          const dbId = result[0].id;
+          let dbMail = result[0].email;
+          let dbPwd = result[0].password;
+          let dbId = result[0].id;
+          // Check the password
           bcrypt.compare(req.body.pwd, dbPwd).then(function(result) {
+            // If the password is correct
             if (result == true) {
-              db.query('SELECT project_id, token FROM users_has_project JOIN project on users_has_project.project_id = project.id WHERE users_id = ?;', dbId, function(err, projectResult, field) {
-                let projectArray = "[";
-                projectResult.forEach(project => {
-                  projectArray = projectArray + '[' + project.project_id + ',' + project.token + '],'
-                });
-                projectArray = projectArray.substring(0, projectArray.length - 1);
-                projectArray = projectArray + ']'
-                req.session.users_project_list = projectArray;
-                req.session.user_id = dbId;
-                res.status(200).json({success: 'Logged in'});
+              db.query('SELECT project_id, name, description, token FROM users_has_project JOIN project on users_has_project.project_id = project.id WHERE users_id = ?;', dbId, function(err, projectsResult, field) {      
+                req.session.loggedin = true;
+                req.session.username = username;
+                req.session.projectList = projectsResult;
+                res.status(200).json({success: 'Logged-in successfully'});
               });
             }
             else {
+              // Password is incorrect
               res.status(403).json({error: 'Wrong credentials'});
             }
           });
         }
         else {
-          throw 'Too many row with email value'; // SHOULD NEVER HAPPEND
+          res.status(400).json({error: 'Wrong credentials'})
         }
       });
     }
-    catch (error) {
-      res.status(400).json({error: error});
-    }
-
   }
 });
 
