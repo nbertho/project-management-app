@@ -28,7 +28,7 @@ const register = ( props ) => {
 
             <div>
                 <p className="text-center mb-1">
-                    <small>If you already have an account, you can log <Link to="/register">here</Link></small>
+                    <small>If you already have an account, you can log <Link to="/login">here</Link></small>
                 </p>
             </div>
 
