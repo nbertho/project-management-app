@@ -10,27 +10,30 @@ This app is done for my graduation work
 
 * [ ] Build backend ( **Express JS** )
     * [x] Connect to DB
-    * [x] Handle login connexion
+    * [x] Handle login connection
     * [ ] Create roles route
-    * [ ] Create users route
+    * [x] Create users route
     * [x] Create projects route
     * [x] Create tasks route
 
 * [ ] Build frontend ( **React** )
-    * [ ] Create login page
-    * [ ] Create admin page
-    * [ ] Create user page
+    * [x] Create homepage page
+    * [x] Create login page
+    * [x] Create register page
+    * [ ] Create project list page
+    * [ ] Create project detail page
 
 * [ ] Improve code and projects overall
 
 ## Version 1.0
 - In **projects.js** creating a project give him status_id of 1 and makes it active
 
-## Futur improvements
+## Future improvements
 
 ## Features to add
 
 ## TODO
-- Change <em>secret</em> from **index.js** when launching the app
-- Check code sent to make sure they are relevant
-- Check Json response to make sure the key are the same around the app
+- [ ] Change <em>secret</em> from **index.js** when launching the app
+- [ ] Check code sent to make sure they are relevant
+- [ ] Check Json response to make sure the key are the same around the app
+- [ ] Improve the overall design
