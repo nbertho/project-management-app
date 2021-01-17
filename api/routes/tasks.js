@@ -38,18 +38,18 @@ router.use( async (req, res, next) => {
               next();
             }
             else {
-              res.status(401).json({error: 'Unauthorised'});
+              res.status(401).json({error: 'Unauthorized'});
             }
           }
           else {
-            res.status(401).json({error: 'Unauthorised'});
+            res.status(401).json({error: 'Unauthorized'});
           }
         }
       });   
     }
     catch(e) {
       console.log(e);
-      res.status(401).json({error: 'Unauthorised'})
+      res.status(401).json({error: 'Unauthorized'})
     } 
   }
 });
@@ -117,7 +117,7 @@ router.put('/create/:project_id', async (req, res) => {
               throw err;
             }
             else {
-              // If task is created successfullt, return ID
+              // If task is created successfully, return ID
               let { insertId } = insertResult;
               res.status(201).send('' + insertId);
             }

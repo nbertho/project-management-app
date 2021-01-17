@@ -38,18 +38,18 @@ router.use( async (req, res, next) => {
               next();
             }
             else {
-              res.status(401).json({error: 'Unauthorised'});
+              res.status(401).json({error: 'Unauthorized'});
             }
           }
           else {
-            res.status(401).json({error: 'Unauthorised'});
+            res.status(401).json({error: 'Unauthorized'});
           }
         }
       });   
     }
     catch(e) {
       console.log(e);
-      res.status(401).json({error: 'Unauthorised'})
+      res.status(401).json({error: 'Unauthorized'})
     } 
   }
 });
