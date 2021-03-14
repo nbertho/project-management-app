@@ -9,6 +9,7 @@ import Cookies from 'js-cookie';
 import HomePage from './pages/Home';
 import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
+import AppWrapper from './components/AppWrapper/AppWrapper';
 
 function App() {
 
@@ -23,6 +24,9 @@ function App() {
                     </Route>
                     <Route path="/register">
                         <RegisterPage />
+                    </Route>
+                    <Route path='/home'>
+                        <AppWrapper />
                     </Route>
                 </Switch>
             </Router>;
